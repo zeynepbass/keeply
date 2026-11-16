@@ -691,6 +691,14 @@ export const tr = {
   toast: {
     dismiss: 'Bildirimi kapat',
   },
+  errors: {
+    noSession: 'Oturum açmış bir kullanıcı bulunamadı.',
+    storageRead: 'Kayıtlı veriler okunamadı.',
+    storageWrite: 'Veriler kaydedilemedi. Cihazında yeterli alan olduğundan emin ol.',
+    storageRemove: 'Veriler silinemedi.',
+    fileNotFound: 'Seçilen dosya bulunamadı.',
+    fileSave: 'Dosya kaydedilemedi. Cihazında yeterli alan olduğundan emin ol.',
+  },
 } as const;
 
 export type Translations = typeof tr;

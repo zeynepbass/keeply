@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { t } from '@/shared/i18n';
+
 import { AppError } from './errors';
 
 const PREFIX = 'keeply';
@@ -13,7 +15,7 @@ export async function readJson<T>(key: string, fallback: T): Promise<T> {
     const raw = await AsyncStorage.getItem(key);
     return raw === null ? fallback : (JSON.parse(raw) as T);
   } catch {
-    throw new AppError('storage', 'Kayıtlı veriler okunamadı.');
+    throw new AppError('storage', t.errors.storageRead);
   }
 }
 
@@ -21,7 +23,7 @@ export async function writeJson<T>(key: string, value: T): Promise<void> {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch {
-    throw new AppError('storage', 'Veriler kaydedilemedi. Cihazında yeterli alan olduğundan emin ol.');
+    throw new AppError('storage', t.errors.storageWrite);
   }
 }
 
@@ -29,7 +31,7 @@ export async function removeKeys(keys: string[]): Promise<void> {
   try {
     await AsyncStorage.multiRemove(keys);
   } catch {
-    throw new AppError('storage', 'Veriler silinemedi.');
+    throw new AppError('storage', t.errors.storageRemove);
   }
 }
 
