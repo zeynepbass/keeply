@@ -391,7 +391,7 @@ export const tr = {
     emptyActive: 'Aktif garantili ürünün yok.',
     emptyExpiring: 'Önümüzdeki 30 gün içinde dolacak garanti yok.',
     emptyExpired: 'Süresi dolmuş garanti yok.',
-    progressLabel: (percent: number) => `Garanti süresinin %${percent}'i geçti`,
+    progressLabel: (percent: number) => `Geçen süre: %${percent}`,
   },
   returns: {
     title: 'İade Süreleri',
