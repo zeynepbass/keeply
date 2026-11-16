@@ -1,5 +1,5 @@
 import { formatCurrency, formatFileSize, getInitials, parseCurrencyInput } from './format';
-import { matchesSearch, normalizeForSearch } from './search';
+import { brandUpperCase, matchesSearch, normalizeForSearch } from './search';
 
 describe('format utilities', () => {
   it('formats Turkish lira amounts', () => {
@@ -35,6 +35,12 @@ describe('search utilities', () => {
   it('normalizes Turkish characters', () => {
     expect(normalizeForSearch('Saç Kurutma Makinesi')).toBe('sac kurutma makinesi');
     expect(normalizeForSearch('IŞIK İPEK')).toBe('isik ipek');
+  });
+
+  it('uppercases brand names respecting their origin', () => {
+    expect(brandUpperCase('Philips')).toBe('PHILIPS');
+    expect(brandUpperCase('Arçelik')).toBe('ARÇELİK');
+    expect(brandUpperCase('Beko')).toBe('BEKO');
   });
 
   it('matches every term across fields', () => {

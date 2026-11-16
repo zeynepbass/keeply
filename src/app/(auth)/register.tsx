@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
 
 import { AuthHeader } from '@/features/auth/components/auth-header';
@@ -16,12 +16,12 @@ import { getErrorMessage } from '@/shared/lib/errors';
 
 export default function RegisterScreen() {
   const register = useRegister();
-  const { control, handleSubmit, watch } = useForm<RegisterValues>({
+  const { control, handleSubmit } = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
     mode: 'onTouched',
     defaultValues: { name: '', email: '', password: '', passwordConfirm: '', acceptTerms: false },
   });
-  const acceptTerms = watch('acceptTerms');
+  const acceptTerms = useWatch({ control, name: 'acceptTerms' });
 
   const onSubmit = () =>
     void handleSubmit((values) =>

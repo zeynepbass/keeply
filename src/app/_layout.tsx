@@ -29,6 +29,9 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={signedIn}>
         <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+        <Stack.Screen name="products/new" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
+        <Stack.Screen name="products/[id]/index" />
+        <Stack.Screen name="products/[id]/edit" options={{ presentation: 'modal' }} />
       </Stack.Protected>
     </Stack>
   );

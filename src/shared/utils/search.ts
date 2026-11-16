@@ -19,6 +19,12 @@ export function turkishUpperCase(value: string): string {
   return value.replace(/i/g, 'İ').replace(/ı/g, 'I').toUpperCase();
 }
 
+const TURKISH_LETTERS = /[çğıöşüÇĞİÖŞÜ]/;
+
+export function brandUpperCase(value: string): string {
+  return TURKISH_LETTERS.test(value) ? turkishUpperCase(value) : value.toUpperCase();
+}
+
 export function normalizeForSearch(value: string): string {
   return turkishLowerCase(value)
     .replace(/[çğıiöşüâîû]/g, (char) => CHAR_MAP[char] ?? char)
