@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router, useFocusEffect } from 'expo-router';
 import { CircleCheck } from 'lucide-react-native';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, BackHandler, Pressable, View } from 'react-native';
 
@@ -13,13 +13,14 @@ import { StepHeader, StepTitle } from '@/features/products/components/step-heade
 import { useAddProduct, type AddProductResult } from '@/features/products/hooks/use-add-product';
 import { createEmptyProductForm, PRODUCT_FORM_STEPS, productFormSchema, type ProductFormValues } from '@/features/products/schemas/product-schema';
 import { getProductTitle } from '@/features/products/services/product-display';
+import { useScanResultStore } from '@/features/receipt-scanner/stores/scan-result-store';
 import { WarrantyBadge } from '@/features/warranties/components/warranty-badge';
 import { toast } from '@/shared/components/feedback/toast-store';
 import { Screen } from '@/shared/components/layout/screen';
 import { Button, Card, Text } from '@/shared/components/ui';
 import { t } from '@/shared/i18n';
 import { getErrorMessage } from '@/shared/lib/errors';
-import { mediaPicker } from '@/shared/services/media-picker';
+import { createId } from '@/shared/lib/id';
 import { useTheme } from '@/shared/theme/theme-provider';
 import { formatDate } from '@/shared/utils/date';
 
@@ -32,6 +33,8 @@ export default function AddProductScreen() {
   const [attachment, setAttachment] = useState<PendingAttachment | null>(null);
   const [result, setResult] = useState<AddProductResult | null>(null);
   const addProduct = useAddProduct();
+  const scanRequestId = useRef(createId()).current;
+  const consumeScan = useScanResultStore((state) => state.consume);
   const { control, trigger, setValue, getValues, reset, formState } = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     mode: 'onTouched',
@@ -56,6 +59,15 @@ export default function AddProductScreen() {
       setStep((value) => value - 1);
     }
   }, [step, close]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const scanned = consumeScan(scanRequestId);
+      if (scanned) {
+        setAttachment((current) => ({ file: scanned, type: current?.type ?? 'receipt' }));
+      }
+    }, [consumeScan, scanRequestId]),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -98,16 +110,7 @@ export default function AddProductScreen() {
     save();
   };
 
-  const scanReceipt = async () => {
-    try {
-      const file = await mediaPicker.takePhoto();
-      if (file) {
-        setAttachment({ file, type: attachment?.type ?? 'receipt' });
-      }
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    }
-  };
+  const scanReceipt = () => router.push({ pathname: '/scanner', params: { mode: 'draft', requestId: scanRequestId } });
 
   const restart = () => {
     reset(createEmptyProductForm());
