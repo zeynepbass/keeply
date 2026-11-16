@@ -1,3 +1,5 @@
+import { tr } from '@/shared/i18n/tr';
+
 export type AppErrorCode =
   | 'not_found'
   | 'validation'
@@ -18,7 +20,7 @@ export class AppError extends Error {
   }
 }
 
-export const DEFAULT_ERROR_MESSAGE = 'Beklenmeyen bir hata oluştu. Lütfen tekrar dene.';
+export const DEFAULT_ERROR_MESSAGE = tr.common.genericError;
 
 export function getErrorMessage(error: unknown): string {
   if (error instanceof AppError) {

@@ -1,5 +1,6 @@
 import { Directory, File, Paths } from 'expo-file-system';
 
+import { t } from '@/shared/i18n';
 import { AppError } from '@/shared/lib/errors';
 
 export type StorageFolder = 'documents' | 'images';
@@ -54,7 +55,7 @@ export const fileStorage = {
     try {
       const source = new File(sourceUri);
       if (!source.exists) {
-        throw new AppError('file', 'Seçilen dosya bulunamadı.');
+        throw new AppError('file', t.errors.fileNotFound);
       }
       const destination = new File(folderFor(userId, folder), fileName);
       if (destination.exists) {
@@ -66,7 +67,7 @@ export const fileStorage = {
       if (error instanceof AppError) {
         throw error;
       }
-      throw new AppError('file', 'Dosya kaydedilemedi. Cihazında yeterli alan olduğundan emin ol.');
+      throw new AppError('file', t.errors.fileSave);
     }
   },
 
