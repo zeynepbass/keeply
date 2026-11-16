@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { Calendar, CircleCheck, Clock, FileWarning, PencilLine, Store, Trash2, TriangleAlert } from 'lucide-react-native';
+import { Calendar, CalendarPlus, CircleCheck, Clock, FileWarning, PencilLine, Store, Trash2, TriangleAlert } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -265,6 +265,14 @@ export default function ProductDetailScreen() {
             </View>
           ) : null}
 
+          <Button
+            label={t.notifications.addReminder}
+            icon={CalendarPlus}
+            variant="secondary"
+            block
+            className="mb-2.5"
+            onPress={() => router.push({ pathname: '/reminders/new', params: { productId: item.id } })}
+          />
           <View className="flex-row gap-2.5">
             <Button label={t.common.edit} icon={PencilLine} variant="ghost" className="flex-1" onPress={edit} />
             <Button label={t.products.detail.deleteProduct} icon={Trash2} variant="danger" className="flex-1" loading={deleteProduct.isPending} onPress={confirmDelete} />

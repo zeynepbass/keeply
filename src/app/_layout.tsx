@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useSessionRestore } from '@/features/auth/hooks/use-session-restore';
 import { useAuthStore } from '@/features/auth/stores/auth-store';
 import { useOnboardingStore } from '@/features/auth/stores/onboarding-store';
+import { useNotificationBootstrap } from '@/features/notifications/hooks/use-notification-bootstrap';
 import { AppProviders } from '@/providers/app-providers';
 import { useAppFonts } from '@/shared/hooks/use-app-fonts';
 
@@ -19,6 +20,7 @@ function useOnboardingHydrated(): boolean {
 }
 
 function RootNavigator() {
+  useNotificationBootstrap();
   const signedIn = useAuthStore((state) => state.status === 'signed_in');
   return (
     <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
@@ -37,6 +39,9 @@ function RootNavigator() {
         <Stack.Screen name="products/[id]/service/form" options={{ presentation: 'modal' }} />
         <Stack.Screen name="warranties" />
         <Stack.Screen name="returns" />
+        <Stack.Screen name="notifications/index" />
+        <Stack.Screen name="notifications/preferences" />
+        <Stack.Screen name="reminders/new" options={{ presentation: 'modal' }} />
         <Stack.Screen name="documents/new" options={{ presentation: 'modal' }} />
         <Stack.Screen name="documents/[id]" />
         <Stack.Screen name="scanner" options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }} />

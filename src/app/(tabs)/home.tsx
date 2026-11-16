@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Clock, Package, PackageOpen, Plus, ScanLine, ShieldCheck, Tag, Upload } from 'lucide-react-native';
+import { Bell, CalendarPlus, Clock, Package, PackageOpen, Plus, ScanLine, ShieldCheck, Tag, Upload } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,10 +12,11 @@ import { StatCard } from '@/features/dashboard/components/stat-card';
 import { AttachDocumentSheet } from '@/features/documents/components/attach-document-sheet';
 import { usePendingDocumentStore } from '@/features/documents/stores/pending-document-store';
 import { buildDashboardSummary } from '@/features/dashboard/services/dashboard-summary';
+import { useInbox } from '@/features/notifications/hooks/use-inbox';
 import { ProductRow } from '@/features/products/components/product-row';
 import { useProducts } from '@/features/products/hooks/use-products';
 import { WarrantyBadge } from '@/features/warranties/components/warranty-badge';
-import { Badge, EmptyState, ErrorState, LoadingState, SectionHeader, Text } from '@/shared/components/ui';
+import { Badge, EmptyState, ErrorState, IconButton, LoadingState, SectionHeader, Text } from '@/shared/components/ui';
 import { t } from '@/shared/i18n';
 import { formatDate, formatRelativeTime, getGreeting, today } from '@/shared/utils/date';
 import { useTheme } from '@/shared/theme/theme-provider';
@@ -26,6 +27,7 @@ export default function HomeScreen() {
   const { colors } = useTheme();
   const products = useProducts();
   const activities = useActivities();
+  const inbox = useInbox();
   const referenceDate = today();
   const [uploadOpen, setUploadOpen] = useState(false);
   const setPendingDocument = usePendingDocumentStore((state) => state.set);
@@ -39,6 +41,7 @@ export default function HomeScreen() {
           {user.name}
         </Text>
       </View>
+      <IconButton icon={Bell} label={t.dashboard.notifications} badge={inbox.unreadCount > 0} onPress={() => router.push('/notifications')} />
     </View>
   );
 
@@ -131,8 +134,8 @@ export default function HomeScreen() {
           actions={[
             { key: 'scan', label: t.dashboard.actions.scan, icon: ScanLine, onPress: () => router.push({ pathname: '/scanner', params: { mode: 'library' } }) },
             { key: 'upload', label: t.dashboard.actions.upload, icon: Upload, onPress: () => setUploadOpen(true) },
+            { key: 'reminder', label: t.dashboard.actions.reminder, icon: CalendarPlus, onPress: () => router.push('/reminders/new') },
             { key: 'warranties', label: t.dashboard.actions.warranties, icon: ShieldCheck, onPress: () => router.push('/warranties') },
-            { key: 'returns', label: t.returns.title, icon: Tag, onPress: () => router.push('/returns') },
           ]}
         />
       </View>

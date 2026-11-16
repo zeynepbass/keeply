@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useUserId } from '@/features/auth/stores/auth-store';
+import { notificationScheduler } from '@/features/notifications/services/notification-scheduler';
+import { preferencesService } from '@/features/notifications/services/preferences-service';
 import { queryClient } from '@/shared/lib/query-client';
 import { queryKeys } from '@/shared/lib/query-keys';
 
@@ -44,7 +46,11 @@ export function useCreateProduct() {
 export function useUpdateProduct(productId: string) {
   const userId = useUserId();
   return useMutation({
-    mutationFn: (input: ProductInput) => productService.update(userId, productId, input),
+    mutationFn: async (input: ProductInput) => {
+      const product = await productService.update(userId, productId, input);
+      await notificationScheduler.syncProduct(userId, product, await preferencesService.get(userId));
+      return product;
+    },
     onSuccess: (product) => {
       queryClient.setQueryData(queryKeys.products.detail(userId, productId), product);
       return invalidateProductData(userId);
