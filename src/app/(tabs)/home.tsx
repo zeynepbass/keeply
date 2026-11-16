@@ -1,13 +1,16 @@
 import { router } from 'expo-router';
-import { Clock, Package, PackageOpen, Plus, ShieldCheck, Tag } from 'lucide-react-native';
-import { useMemo } from 'react';
+import { Clock, Package, PackageOpen, Plus, ScanLine, ShieldCheck, Tag, Upload } from 'lucide-react-native';
+import { useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ActivityFeed } from '@/features/activity/components/activity-feed';
 import { useActivities } from '@/features/activity/hooks/use-activities';
 import { useCurrentUser } from '@/features/auth/stores/auth-store';
+import { QuickActions } from '@/features/dashboard/components/quick-actions';
 import { StatCard } from '@/features/dashboard/components/stat-card';
+import { AttachDocumentSheet } from '@/features/documents/components/attach-document-sheet';
+import { usePendingDocumentStore } from '@/features/documents/stores/pending-document-store';
 import { buildDashboardSummary } from '@/features/dashboard/services/dashboard-summary';
 import { ProductRow } from '@/features/products/components/product-row';
 import { useProducts } from '@/features/products/hooks/use-products';
@@ -24,6 +27,8 @@ export default function HomeScreen() {
   const products = useProducts();
   const activities = useActivities();
   const referenceDate = today();
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const setPendingDocument = usePendingDocumentStore((state) => state.set);
   const summary = useMemo(() => buildDashboardSummary(products.data ?? [], referenceDate), [products.data, referenceDate]);
 
   const header = (
@@ -119,6 +124,20 @@ export default function HomeScreen() {
       </View>
 
       <View className="px-5 pt-6">
+        <Text accessibilityRole="header" className="mb-3 font-display text-[16px]">
+          {t.dashboard.quickActions}
+        </Text>
+        <QuickActions
+          actions={[
+            { key: 'scan', label: t.dashboard.actions.scan, icon: ScanLine, onPress: () => router.push({ pathname: '/scanner', params: { mode: 'library' } }) },
+            { key: 'upload', label: t.dashboard.actions.upload, icon: Upload, onPress: () => setUploadOpen(true) },
+            { key: 'warranties', label: t.dashboard.actions.warranties, icon: ShieldCheck, onPress: () => router.push('/warranties') },
+            { key: 'returns', label: t.returns.title, icon: Tag, onPress: () => router.push('/returns') },
+          ]}
+        />
+      </View>
+
+      <View className="px-5 pt-6">
         <SectionHeader
           title={t.dashboard.expiringWarranties}
           actionLabel={t.common.seeAll}
@@ -185,6 +204,15 @@ export default function HomeScreen() {
           <Text variant="secondary">{t.dashboard.noActivity}</Text>
         )}
       </View>
+      <AttachDocumentSheet
+        visible={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        onCamera={() => router.push({ pathname: '/scanner', params: { mode: 'library' } })}
+        onPicked={(file) => {
+          setPendingDocument(file);
+          router.push('/documents/new');
+        }}
+      />
     </ScrollView>
   );
 }

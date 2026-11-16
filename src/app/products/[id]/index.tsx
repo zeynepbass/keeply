@@ -205,7 +205,7 @@ export default function ProductDetailScreen() {
                   compact
                   document={document}
                   subtitle={`${formatFileSize(document.size)} · ${formatDate(document.createdAt.slice(0, 10))}`}
-                  onPress={() => documentViewer.open(document).catch((error) => toast.error(getErrorMessage(error)))}
+                  onPress={() => router.push({ pathname: '/documents/[id]', params: { id: document.id } })}
                   trailing={
                     <Pressable accessibilityRole="button" hitSlop={8} onPress={() => documentViewer.open(document).catch((error) => toast.error(getErrorMessage(error)))}>
                       <Text className="font-bold text-[12.5px] text-primary">{t.common.view}</Text>
