@@ -3,6 +3,7 @@ import { Link, router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
 
+import { env } from '@/config/env';
 import { AuthHeader } from '@/features/auth/components/auth-header';
 import { useLogin } from '@/features/auth/hooks/use-auth-actions';
 import { loginSchema, type LoginValues } from '@/features/auth/schemas/auth-schemas';
@@ -37,6 +38,13 @@ export default function LoginScreen() {
       footer={
         <View className="gap-3.5 px-7 pt-3">
           <Button label={t.auth.login} block loading={login.isPending} onPress={onSubmit} />
+          {env.demoEnabled ? (
+            <Link href="/demo" asChild>
+              <Pressable accessibilityRole="link" className="items-center p-1">
+                <Text className="font-semibold text-[13.5px] text-primary">{t.onboarding.tryDemo}</Text>
+              </Pressable>
+            </Link>
+          ) : null}
           <View className="flex-row justify-center">
             <Text className="font-body text-[13.5px] text-text-secondary">{`${t.auth.noAccount} `}</Text>
             <Link href="/register" replace asChild>
