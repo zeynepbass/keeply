@@ -24,6 +24,7 @@ function RootNavigator() {
     <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
       <Stack.Screen name="index" options={{ animation: 'none' }} />
       <Stack.Screen name="legal/[doc]" />
+      <Stack.Screen name="demo" options={{ animation: 'fade' }} />
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="(auth)" options={{ animation: 'fade' }} />
       </Stack.Protected>
