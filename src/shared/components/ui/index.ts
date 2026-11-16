@@ -1,6 +1,7 @@
 export { Badge, type BadgeTone } from './badge';
 export { Button } from './button';
 export { Card, PressableCard, elevatedShadow } from './card';
+export { Checkbox } from './checkbox';
 export { Chip } from './chip';
 export { DateField } from './date-field';
 export { EmptyState } from './empty-state';
