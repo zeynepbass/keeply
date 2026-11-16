@@ -13,7 +13,7 @@ import { ProductAvatar } from '@/features/products/components/product-avatar';
 import { useProducts } from '@/features/products/hooks/use-products';
 import { getProductTitle } from '@/features/products/services/product-display';
 import { toast } from '@/shared/components/feedback/toast-store';
-import { Screen } from '@/shared/components/layout/screen';
+import { MODAL_EDGES, Screen } from '@/shared/components/layout/screen';
 import { TopBar } from '@/shared/components/layout/top-bar';
 import { Button, Card, Chip, EmptyState, Text, TextField } from '@/shared/components/ui';
 import { t } from '@/shared/i18n';
@@ -39,7 +39,7 @@ export default function NewDocumentScreen() {
 
   if (!file) {
     return (
-      <Screen header={<TopBar title={t.documents.form.title} backIcon="close" />}>
+      <Screen edges={MODAL_EDGES} header={<TopBar title={t.documents.form.title} backIcon="close" />}>
         <EmptyState className="flex-1" icon={FileText} title={t.documents.fileMissing} actionLabel={t.common.close} onAction={() => router.back()} />
       </Screen>
     );
@@ -67,7 +67,7 @@ export default function NewDocumentScreen() {
   };
 
   return (
-    <Screen
+    <Screen edges={MODAL_EDGES}
       scroll
       keyboard
       header={<TopBar title={t.documents.form.title} backIcon="close" onBack={() => { clear(); router.back(); }} />}

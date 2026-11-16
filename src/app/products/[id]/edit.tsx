@@ -9,7 +9,7 @@ import { useProduct, useUpdateProduct } from '@/features/products/hooks/use-prod
 import { fromProduct, productFormSchema, toProductInput, type ProductFormValues } from '@/features/products/schemas/product-schema';
 import type { Product } from '@/features/products/types';
 import { toast } from '@/shared/components/feedback/toast-store';
-import { Screen } from '@/shared/components/layout/screen';
+import { MODAL_EDGES, Screen } from '@/shared/components/layout/screen';
 import { TopBar } from '@/shared/components/layout/top-bar';
 import { Button, ErrorState, LoadingState, SectionLabel } from '@/shared/components/ui';
 import { t } from '@/shared/i18n';
@@ -35,7 +35,7 @@ function EditProductForm({ product }: { product: Product }) {
     )();
 
   return (
-    <Screen
+    <Screen edges={MODAL_EDGES}
       scroll
       keyboard
       header={<TopBar title={t.products.edit.title} backIcon="close" />}
@@ -63,14 +63,14 @@ export default function EditProductScreen() {
   const product = useProduct(id);
   if (product.isPending) {
     return (
-      <Screen header={<TopBar title={t.products.edit.title} backIcon="close" />}>
+      <Screen edges={MODAL_EDGES} header={<TopBar title={t.products.edit.title} backIcon="close" />}>
         <LoadingState />
       </Screen>
     );
   }
   if (product.isError || !product.data) {
     return (
-      <Screen header={<TopBar title={t.products.edit.title} backIcon="close" />}>
+      <Screen edges={MODAL_EDGES} header={<TopBar title={t.products.edit.title} backIcon="close" />}>
         <ErrorState error={product.error} onRetry={() => product.refetch()} />
       </Screen>
     );

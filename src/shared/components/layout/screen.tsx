@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { cn } from '@/shared/lib/cn';
 
+export const MODAL_EDGES = { top: Platform.OS !== 'ios', bottom: true };
+
 export interface ScreenProps extends PropsWithChildren {
   scroll?: boolean;
   keyboard?: boolean;
