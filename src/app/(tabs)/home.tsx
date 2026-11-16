@@ -108,7 +108,13 @@ export default function HomeScreen() {
             label={t.dashboard.stats.expiring}
             onPress={() => router.push({ pathname: '/warranties', params: { tab: 'expiring' } })}
           />
-          <StatCard icon={Tag} iconColor="danger-icon" value={summary.upcomingReturns} label={t.dashboard.stats.returns} />
+          <StatCard
+            icon={Tag}
+            iconColor="danger-icon"
+            value={summary.upcomingReturns}
+            label={t.dashboard.stats.returns}
+            onPress={() => router.push('/returns')}
+          />
         </View>
       </View>
 
@@ -137,7 +143,7 @@ export default function HomeScreen() {
 
       {summary.returns.length > 0 ? (
         <View className="px-5 pt-6">
-          <SectionHeader title={t.dashboard.upcomingReturns} />
+          <SectionHeader title={t.dashboard.upcomingReturns} actionLabel={t.common.seeAll} onAction={() => router.push('/returns')} />
           <View className="gap-2.5">
             {summary.returns.map(({ product, deadline }) => (
               <ProductRow
