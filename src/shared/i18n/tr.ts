@@ -54,6 +54,7 @@ export const tr = {
     storeRequired: 'Lütfen mağaza adını giriniz',
     dateInvalid: 'Geçerli bir tarih seç',
     purchaseDateFuture: 'Satın alma tarihi bugünden ileri olamaz',
+    serviceDateFuture: 'Servis tarihi bugünden ileri olamaz',
     priceInvalid: 'Geçerli bir tutar giriniz (örn. 1.299,90)',
     warrantyMonthsInvalid: 'Garanti süresi 1 ile 240 ay arasında olmalı',
     returnBeforePurchase: 'İade son tarihi satın alma tarihinden önce olamaz',
@@ -487,6 +488,7 @@ export const tr = {
     empty: 'Bu ürün için henüz servis kaydı yok.',
     emptyDescription: 'Tamir ve bakım işlemlerini kaydederek ürününün geçmişini takip et.',
     count: (count: number) => `${count} kayıt`,
+    attachmentCount: (count: number) => `${count} belge`,
     totalCost: (amount: string) => `Toplam: ${amount}`,
   },
   notifications: {

@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useActivities } from '@/features/activity/hooks/use-activities';
 import { AttachDocumentSheet } from '@/features/documents/components/attach-document-sheet';
 import { DocumentRow } from '@/features/documents/components/document-row';
-import { useCreateDocument, useProductDocuments } from '@/features/documents/hooks/use-documents';
+import { useCreateDocument, useDocuments, useProductDocuments } from '@/features/documents/hooks/use-documents';
 import { suggestDocumentName } from '@/features/documents/services/document-rules';
 import { documentViewer } from '@/features/documents/services/document-viewer';
 import type { PickedFile } from '@/features/documents/types';
@@ -16,6 +16,8 @@ import { buildProductTimeline, ProductTimeline } from '@/features/products/compo
 import { useDeleteProduct, useProduct } from '@/features/products/hooks/use-products';
 import { getProductTitle } from '@/features/products/services/product-display';
 import { getReturnDeadline } from '@/features/returns/services/return-calculator';
+import { ServiceRecordCard } from '@/features/service-history/components/service-record-card';
+import { useServiceRecords } from '@/features/service-history/hooks/use-service-records';
 import { getWarranty } from '@/features/warranties/services/warranty-calculator';
 import { toast } from '@/shared/components/feedback/toast-store';
 import { TopBar } from '@/shared/components/layout/top-bar';
@@ -33,6 +35,8 @@ export default function ProductDetailScreen() {
   const insets = useSafeAreaInsets();
   const product = useProduct(id);
   const documents = useProductDocuments(id);
+  const serviceRecords = useServiceRecords(id);
+  const allDocuments = useDocuments();
   const activities = useActivities();
   const deleteProduct = useDeleteProduct();
   const createDocument = useCreateDocument();
@@ -213,6 +217,42 @@ export default function ProductDetailScreen() {
                   }
                 />
               ))
+            )}
+          </View>
+
+          <View className="mb-3 flex-row items-center justify-between">
+            <Text accessibilityRole="header" className="font-display text-[15px]">
+              {t.products.detail.serviceHistory}
+            </Text>
+            <Button
+              label={t.products.detail.addService}
+              variant="secondary"
+              size="sm"
+              onPress={() => router.push({ pathname: '/products/[id]/service/form', params: { id: item.id } })}
+            />
+          </View>
+          <View className="mb-6 gap-2.5">
+            {(serviceRecords.data ?? []).length === 0 ? (
+              <Text variant="secondary">{t.products.detail.noService}</Text>
+            ) : (
+              <>
+                {(serviceRecords.data ?? []).slice(0, 2).map((record) => (
+                  <ServiceRecordCard
+                    key={record.id}
+                    record={record}
+                    timeline={false}
+                    documentCount={(allDocuments.data ?? []).filter((document) => document.serviceRecordId === record.id).length}
+                    onPress={() => router.push({ pathname: '/products/[id]/service/form', params: { id: item.id, recordId: record.id } })}
+                  />
+                ))}
+                <Pressable
+                  accessibilityRole="link"
+                  onPress={() => router.push({ pathname: '/products/[id]/service', params: { id: item.id } })}
+                  className="items-center py-1"
+                >
+                  <Text className="font-semibold text-[12.5px] text-primary">{`${t.common.seeAll} (${(serviceRecords.data ?? []).length})`}</Text>
+                </Pressable>
+              </>
             )}
           </View>
 

@@ -177,6 +177,46 @@ export const DEMO_PRODUCTS: DemoProduct[] = [
   },
 ];
 
+export interface DemoServiceRecord {
+  productKey: string;
+  daysAgo: number;
+  provider: string;
+  problem: string;
+  repairDetails: string | null;
+  cost: number | null;
+  notes: string | null;
+}
+
+export const DEMO_SERVICE_RECORDS: DemoServiceRecord[] = [
+  {
+    productKey: 'arcelik',
+    daysAgo: 120,
+    provider: 'Arçelik Yetkili Servisi',
+    problem: 'Alt bölmede soğutma yetersizdi, buzlanma oluşuyordu.',
+    repairDetails: 'Fan motoru değiştirildi, gaz kontrolü yapıldı.',
+    cost: null,
+    notes: 'Garanti kapsamında ücretsiz yapıldı. Servis fiş no: 4481203',
+  },
+  {
+    productKey: 'arcelik',
+    daysAgo: 30,
+    provider: 'Arçelik Yetkili Servisi',
+    problem: 'Yıllık periyodik bakım.',
+    repairDetails: 'Kondenser temizliği ve conta kontrolü yapıldı.',
+    cost: 750,
+    notes: null,
+  },
+  {
+    productKey: 'samsung',
+    daysAgo: 95,
+    provider: 'Samsung Yetkili Servis — Kadıköy',
+    problem: 'Şarj girişi gevşemişti, kablo takılınca şarj olmuyordu.',
+    repairDetails: 'USB-C şarj soketi değiştirildi.',
+    cost: null,
+    notes: 'Garanti kapsamında, 3 iş gününde teslim edildi.',
+  },
+];
+
 export const DEMO_DOCUMENTS: DemoDocument[] = [
   {
     productKey: 'samsung',

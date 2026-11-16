@@ -5,13 +5,15 @@ import type { User } from '@/features/auth/types';
 import { documentRepository } from '@/features/documents/services/document-service';
 import type { Document } from '@/features/documents/types';
 import { productRepository } from '@/features/products/services/product-repository';
+import { serviceRecordRepository } from '@/features/service-history/services/service-record-service';
+import type { ServiceRecord } from '@/features/service-history/types';
 import { calculateWarrantyEndDate } from '@/features/warranties/services/warranty-calculator';
 import type { Product } from '@/features/products/types';
 import { createId } from '@/shared/lib/id';
 import { fileStorage } from '@/shared/services/file-storage';
-import { today } from '@/shared/utils/date';
+import { addDays, today } from '@/shared/utils/date';
 
-import { DEMO_DOCUMENTS, DEMO_PRODUCTS } from './demo-data';
+import { DEMO_DOCUMENTS, DEMO_PRODUCTS, DEMO_SERVICE_RECORDS } from './demo-data';
 import { buildSamplePdf } from './sample-pdf';
 
 export const DEMO_ACCOUNT = {
@@ -71,7 +73,27 @@ async function seed(userId: string, now: Date = new Date()): Promise<void> {
     });
   }
 
+  const serviceRecords: ServiceRecord[] = DEMO_SERVICE_RECORDS.map((demo) => {
+    const productId = productIds.get(demo.productKey) as string;
+    const createdAt = hoursAgo(demo.daysAgo * 24, now);
+    const owner = products.find((item) => item.id === productId);
+    activities.push({ id: createId(), kind: 'service_added', productId, subject: owner ? `${owner.brand} ${owner.name}` : '', createdAt });
+    return {
+      id: createId(),
+      productId,
+      date: addDays(reference, -demo.daysAgo),
+      provider: demo.provider,
+      problem: demo.problem,
+      repairDetails: demo.repairDetails,
+      cost: demo.cost,
+      notes: demo.notes,
+      createdAt,
+      updatedAt: createdAt,
+    };
+  });
+
   await productRepository.replaceAll(userId, products);
+  await serviceRecordRepository.replaceAll(userId, serviceRecords);
   await documentRepository.replaceAll(userId, documents);
   await activityRepository.replaceAll(userId, activities);
 }

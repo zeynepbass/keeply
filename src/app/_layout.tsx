@@ -33,6 +33,8 @@ function RootNavigator() {
         <Stack.Screen name="products/new" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
         <Stack.Screen name="products/[id]/index" />
         <Stack.Screen name="products/[id]/edit" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="products/[id]/service/index" />
+        <Stack.Screen name="products/[id]/service/form" options={{ presentation: 'modal' }} />
         <Stack.Screen name="warranties" />
         <Stack.Screen name="returns" />
         <Stack.Screen name="documents/new" options={{ presentation: 'modal' }} />
