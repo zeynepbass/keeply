@@ -8,6 +8,7 @@ import { ActivityIndicator, Linking, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useCreateDocument } from '@/features/documents/hooks/use-documents';
+import { usePendingDocumentStore } from '@/features/documents/stores/pending-document-store';
 import type { PickedFile } from '@/features/documents/types';
 import { useProduct } from '@/features/products/hooks/use-products';
 import { getProductTitle } from '@/features/products/services/product-display';
@@ -50,6 +51,7 @@ export default function ScannerScreen() {
   const [busy, setBusy] = useState(false);
   const [captured, setCaptured] = useState<PickedFile | null>(null);
   const publish = useScanResultStore((state) => state.publish);
+  const setPendingDocument = usePendingDocumentStore((state) => state.set);
   const product = useProduct(mode === 'product' ? params.productId : undefined);
   const createDocument = useCreateDocument();
 
@@ -116,8 +118,8 @@ export default function ScannerScreen() {
       );
       return;
     }
-    publish('library', captured);
-    router.back();
+    setPendingDocument(captured);
+    router.replace('/documents/new');
   };
 
   const close = () => router.back();
