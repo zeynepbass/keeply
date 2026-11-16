@@ -231,7 +231,12 @@ export default function ProductDetailScreen() {
           </View>
         </View>
       </ScrollView>
-      <AttachDocumentSheet visible={attachOpen} onClose={() => setAttachOpen(false)} onPicked={attach} />
+      <AttachDocumentSheet
+        visible={attachOpen}
+        onClose={() => setAttachOpen(false)}
+        onPicked={attach}
+        onCamera={() => router.push({ pathname: '/scanner', params: { mode: 'product', productId: item.id } })}
+      />
     </View>
   );
 }
