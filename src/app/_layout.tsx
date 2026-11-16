@@ -1,20 +1,30 @@
 import '../global.css';
 
-import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 
-import { queryClient } from '@/shared/lib/query-client';
+import { AppProviders } from '@/providers/app-providers';
+import { useAppFonts } from '@/shared/hooks/use-app-fonts';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const fontsReady = useAppFonts();
+
+  useEffect(() => {
+    if (fontsReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsReady]);
+
+  if (!fontsReady) {
+    return null;
+  }
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <Stack screenOptions={{ headerShown: false }} />
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <AppProviders>
+      <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }} />
+    </AppProviders>
   );
 }
