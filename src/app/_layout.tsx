@@ -24,11 +24,15 @@ function RootNavigator() {
     <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
       <Stack.Screen name="index" options={{ animation: 'none' }} />
       <Stack.Screen name="legal/[doc]" />
+      <Stack.Screen name="demo" options={{ animation: 'fade' }} />
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="(auth)" options={{ animation: 'fade' }} />
       </Stack.Protected>
       <Stack.Protected guard={signedIn}>
         <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+        <Stack.Screen name="products/new" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
+        <Stack.Screen name="products/[id]/index" />
+        <Stack.Screen name="products/[id]/edit" options={{ presentation: 'modal' }} />
       </Stack.Protected>
     </Stack>
   );
