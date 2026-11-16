@@ -92,16 +92,32 @@ export default function HomeScreen() {
       <View className="gap-3 px-5 pt-1">
         <View className="flex-row gap-3">
           <StatCard icon={Package} iconColor="primary" value={summary.totalProducts} label={t.dashboard.stats.products} onPress={() => router.push('/products')} />
-          <StatCard icon={ShieldCheck} iconColor="primary" value={summary.activeWarranties} label={t.dashboard.stats.activeWarranties} />
+          <StatCard
+            icon={ShieldCheck}
+            iconColor="primary"
+            value={summary.activeWarranties}
+            label={t.dashboard.stats.activeWarranties}
+            onPress={() => router.push({ pathname: '/warranties', params: { tab: 'active' } })}
+          />
         </View>
         <View className="flex-row gap-3">
-          <StatCard icon={Clock} iconColor="warning-icon" value={summary.expiringWarranties} label={t.dashboard.stats.expiring} />
+          <StatCard
+            icon={Clock}
+            iconColor="warning-icon"
+            value={summary.expiringWarranties}
+            label={t.dashboard.stats.expiring}
+            onPress={() => router.push({ pathname: '/warranties', params: { tab: 'expiring' } })}
+          />
           <StatCard icon={Tag} iconColor="danger-icon" value={summary.upcomingReturns} label={t.dashboard.stats.returns} />
         </View>
       </View>
 
       <View className="px-5 pt-6">
-        <SectionHeader title={t.dashboard.expiringWarranties} />
+        <SectionHeader
+          title={t.dashboard.expiringWarranties}
+          actionLabel={t.common.seeAll}
+          onAction={() => router.push({ pathname: '/warranties', params: { tab: 'expiring' } })}
+        />
         {summary.expiring.length === 0 ? (
           <Text variant="secondary">{t.dashboard.noExpiring}</Text>
         ) : (
