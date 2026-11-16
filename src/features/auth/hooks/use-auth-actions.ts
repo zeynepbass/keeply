@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { notificationScheduler } from '@/features/notifications/services/notification-scheduler';
 import { queryClient } from '@/shared/lib/query-client';
 
 import type { LoginValues, RegisterValues } from '../schemas/auth-schemas';
@@ -32,7 +33,10 @@ export function useRegister() {
 export function useLogout() {
   const clear = useAuthStore((state) => state.clear);
   return useMutation({
-    mutationFn: () => authService.logout(),
+    mutationFn: async () => {
+      await notificationScheduler.cancelAll();
+      await authService.logout();
+    },
     onSettled: () => {
       queryClient.clear();
       clear();

@@ -3,6 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useUserId } from '@/features/auth/stores/auth-store';
 import { documentService } from '@/features/documents/services/document-service';
 import { suggestDocumentName } from '@/features/documents/services/document-rules';
+import { notificationScheduler } from '@/features/notifications/services/notification-scheduler';
+import { preferencesService } from '@/features/notifications/services/preferences-service';
+import type { ScheduleOutcome } from '@/features/notifications/types';
 import { getErrorMessage } from '@/shared/lib/errors';
 import { queryClient } from '@/shared/lib/query-client';
 import { queryKeys } from '@/shared/lib/query-keys';
@@ -16,6 +19,7 @@ import type { Product } from '../types';
 export interface AddProductResult {
   product: Product;
   attachmentError: string | null;
+  reminders: ScheduleOutcome;
 }
 
 export function useAddProduct() {
@@ -40,7 +44,8 @@ export function useAddProduct() {
           attachmentError = getErrorMessage(error);
         }
       }
-      return { product, attachmentError };
+      const reminders = await notificationScheduler.syncProduct(userId, product, await preferencesService.get(userId), { prompt: true });
+      return { product, attachmentError, reminders };
     },
     onSuccess: () =>
       Promise.all([
