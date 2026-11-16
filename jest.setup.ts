@@ -34,3 +34,32 @@ jest.mock('expo-secure-store', () => {
   };
 });
 jest.mock('expo-image-manipulator', () => ({ ImageManipulator: { manipulate: jest.fn() }, SaveFormat: { JPEG: 'jpeg' } }));
+
+jest.mock('expo-notifications', () => {
+  let counter = 0;
+  const scheduled = new Map<string, unknown>();
+  return {
+    __scheduled: scheduled,
+    __permission: { granted: true, canAskAgain: true },
+    getPermissionsAsync: jest.fn(async function getPermissionsAsync() {
+      return jest.requireMock('expo-notifications').__permission;
+    }),
+    requestPermissionsAsync: jest.fn(async () => jest.requireMock('expo-notifications').__permission),
+    scheduleNotificationAsync: jest.fn(async (request: unknown) => {
+      counter += 1;
+      const id = `bildirim-${counter}`;
+      scheduled.set(id, request);
+      return id;
+    }),
+    cancelScheduledNotificationAsync: jest.fn(async (id: string) => {
+      scheduled.delete(id);
+    }),
+    cancelAllScheduledNotificationsAsync: jest.fn(async () => scheduled.clear()),
+    setNotificationHandler: jest.fn(),
+    setNotificationChannelAsync: jest.fn(),
+    getLastNotificationResponse: jest.fn(() => null),
+    addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+    SchedulableTriggerInputTypes: { DATE: 'date' },
+    AndroidImportance: { DEFAULT: 3 },
+  };
+});

@@ -131,6 +131,15 @@ export default function AddProductScreen() {
         <Text className="mb-7 max-w-[280px] text-center font-body text-[14px] leading-[21px] text-text-secondary">
           {t.addProduct.confirmation.description}
         </Text>
+        <Text className="mb-5 max-w-[300px] text-center font-semibold text-[12.5px] text-text-secondary">
+          {result.reminders.status === 'scheduled'
+            ? t.addProduct.confirmation.reminderScheduled(result.reminders.count)
+            : result.reminders.status === 'permission_denied'
+              ? t.addProduct.confirmation.reminderPermissionDenied
+              : result.reminders.status === 'failed'
+                ? t.addProduct.confirmation.reminderFailed
+                : ''}
+        </Text>
         <Card className="mb-3 w-full flex-row items-center gap-3 p-4">
           <ProductAvatar product={result.product} size={48} />
           <View className="min-w-0 flex-1">
