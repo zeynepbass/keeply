@@ -42,6 +42,12 @@ function RootNavigator() {
         <Stack.Screen name="notifications/index" />
         <Stack.Screen name="notifications/preferences" />
         <Stack.Screen name="reminders/new" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="profile/account" />
+        <Stack.Screen name="profile/password" />
+        <Stack.Screen name="profile/language" />
+        <Stack.Screen name="profile/privacy" />
+        <Stack.Screen name="profile/help" />
+        <Stack.Screen name="profile/about" />
         <Stack.Screen name="documents/new" options={{ presentation: 'modal' }} />
         <Stack.Screen name="documents/[id]" />
         <Stack.Screen name="scanner" options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }} />
